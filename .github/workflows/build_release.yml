@@ -40,7 +40,8 @@ jobs:
         with:
           fetch-depth: 0
           submodules: recursive
-          token: ${{ secrets.BOT_TOKEN }}
+          # Fork 无 BOT_TOKEN secret，用默认 GITHUB_TOKEN 即可在 tag push 路径上出正式 release
+          token: ${{ secrets.BOT_TOKEN || github.token }}
 
       - name: Validate and trim semver
         id: semver
@@ -69,7 +70,8 @@ jobs:
           run_install: false
 
       - name: Import GPG key
-        if: github.event_name == 'workflow_dispatch'
+        # Fork 无 BOT_GPG_* secrets 时跳过签名步骤，改用普通 commit/tag
+        if: github.event_name == 'workflow_dispatch' && secrets.BOT_GPG_PRIVATE_KEY != ''
         uses: crazy-max/ghaction-import-gpg@v7
         with:
           gpg_private_key: ${{ secrets.BOT_GPG_PRIVATE_KEY }}
@@ -81,19 +83,27 @@ jobs:
       - name: Setup CI Bot
         if: github.event_name == 'workflow_dispatch'
         run: |
-          git config user.name "${{ secrets.BOT_USERNAME }}"
-          git config user.email "${{ secrets.BOT_USEREMAIL }}"
+          git config user.name "${{ secrets.BOT_USERNAME || 'github-actions[bot]' }}"
+          git config user.email "${{ secrets.BOT_USEREMAIL || 'github-actions[bot]@users.noreply.github.com' }}"
 
       - name: Update package.json and commit
         if: github.event_name == 'workflow_dispatch'
         run: |
           jq --arg version "${{ steps.semver.outputs.version }}" '.version = $version' package.json > package.json.tmp && mv package.json.tmp package.json
           git add package.json
-          git commit -S -m "chore: release v${{ steps.semver.outputs.version }}" --no-verify
+          if [ -n "${{ secrets.BOT_GPG_PRIVATE_KEY }}" ]; then
+            git commit -S -m "chore: release v${{ steps.semver.outputs.version }}" --no-verify
+          else
+            git commit -m "chore: release v${{ steps.semver.outputs.version }}" --no-verify
+          fi
           git push
 
           # For local build, needn't push, the tag will be created by `gh release create`
-          git tag -s "v${{ steps.semver.outputs.version }}" -m "Release v${{ steps.semver.outputs.version }}"
+          if [ -n "${{ secrets.BOT_GPG_PRIVATE_KEY }}" ]; then
+            git tag -s "v${{ steps.semver.outputs.version }}" -m "Release v${{ steps.semver.outputs.version }}"
+          else
+            git tag "v${{ steps.semver.outputs.version }}" -m "Release v${{ steps.semver.outputs.version }}"
+          fi
 
       - name: Get current tag
         id: get_current_tag
