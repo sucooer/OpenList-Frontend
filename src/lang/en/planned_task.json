@@ -1,0 +1,130 @@
+{
+  "name": "Name",
+  "remark": "Remark",
+  "enabled": "Enabled",
+  "schedule": "Schedule",
+  "schedule_type": "Schedule Type",
+  "schedule_type_cron": "Cron",
+  "schedule_type_interval": "Interval",
+  "cron_expr": "Cron Expression",
+  "interval_sec": "Interval (seconds)",
+  "timezone": "Timezone",
+  "action": "Action",
+  "params": "Params (JSON)",
+  "params_tip": "Action parameters in JSON format",
+  "params_invalid": "Invalid JSON params",
+  "next_runs": "Next runs",
+  "last_run": "Last Run",
+  "next_run": "Next Run",
+  "last_result": "Last Result",
+  "operations": "Operations",
+  "run": "Run",
+  "run_dry": "Dry Run",
+  "history": "History",
+  "delete_confirm": "Are you sure you want to delete this planned task?",
+  "dangerous_confirm_title": "Dangerous Operation",
+  "dangerous_confirm_desc": "Task [{{name}}] contains destructive operations (mirror / delete_source / delete). This may permanently delete files. Are you sure you want to run it?",
+  "result": {
+    "success": "Success",
+    "failed": "Failed",
+    "running": "Running",
+    "skipped": "Skipped",
+    "none": "-"
+  },
+  "record": {
+    "start_time": "Start Time",
+    "duration": "Duration",
+    "result": "Result",
+    "log": "Log",
+    "empty": "No run history yet"
+  },
+  "params_help": "Parameter reference",
+  "params_fill": "Fill example",
+  "dangerous_tip": "This action can permanently delete files. Use \"Dry Run\" first; a real run asks for confirmation.",
+  "actions": {
+    "webhook": {
+      "name": "HTTP Request (Webhook)",
+      "desc": "Send an HTTP request to a URL, e.g. to notify an external service.",
+      "params": "url (required): target URL\nmethod: GET (default) | POST | PUT | DELETE\nbody: raw request body, e.g. a JSON string for POST\nheaders: extra headers, e.g. {\"Content-Type\": \"application/json\"}\ntimeout: timeout in seconds, default 30"
+    },
+    "backup": {
+      "name": "Backup",
+      "desc": "Incrementally back up the chosen source folder - including every subfolder and file inside it - into a same-named folder under the target. Re-runs only copy new or changed files.",
+      "params": "source (required): the folder to back up, e.g. /myDrive/Movies\ntarget (required): the backup root; the source folder is recreated inside it, e.g. /backup stores files as /backup/Movies/...\nmode: copy = additive only (default) | mirror = also delete target files missing from source (dangerous)\nrules.completion.action: none/keep_source = keep source (default) | delete_source = delete source after a successful copy (dangerous)\nrules.deletion.action: keep = keep extra target files (default) | delete = delete extra target files (dangerous)\nrules.replacement.action: skip = skip if the target file exists (default) | overwrite = overwrite\nrules.filters.include / exclude: filter arrays, see the note below"
+    },
+    "traverse": {
+      "name": "Traverse (visit)",
+      "desc": "Walk every folder under a path and load its listings/metadata. No files are downloaded or changed - it only visits, useful for warming up a storage's cache.",
+      "params": "path (required): the root folder to traverse, e.g. /myDrive/Movies\ndepth: how many folder levels to descend; 0 = unlimited (all subfolders), 1 = the path itself only, 2 = the path plus its immediate subfolders"
+    }
+  },
+  "filters_tip": "Filter examples: {\"type\":\"extension\",\"value\":\"mkv,mp4\"} keeps only those extensions; {\"type\":\"size\",\"value\":\"10MB\",\"size_op\":\"min\"} keeps files larger than 10MB; {\"type\":\"regex\",\"value\":\"^\\\\..*\"} matches dotfiles — put it in \"exclude\" to skip them. Put a rule in \"include\" to allow-list, in \"exclude\" to block (exclude always wins).",
+  "params_visual": "Parameters (visual editor)",
+  "params_visual_tip": "Click a path input to open the folder tree; the selection is written into the JSON below. You can still edit the JSON directly.",
+  "field": {
+    "source": "Source directory",
+    "target": "Target directory",
+    "url": "Request URL",
+    "mode": "Mode",
+    "method": "HTTP method",
+    "path": "Path",
+    "depth": "Depth (0 = unlimited)"
+  },
+  "opt": {
+    "move": "Move",
+    "copy": "Copy",
+    "mirror": "Mirror"
+  },
+  "webhook_tip": "A webhook is simply \"OpenList calls a URL on schedule\". Fill in the URL and the task sends one HTTP request to it (GET by default) every time it fires — used to notify another system, trigger an external script or push a message. Note: OpenList SENDS the request, it does not receive anything.",
+  "rules_title": "Backup rules",
+  "rule": {
+    "completion": {
+      "title": "Completion rule",
+      "tip": "What to do with source files after a successful backup",
+      "none": "Keep source files",
+      "delete_source": "Delete source files (dangerous)"
+    },
+    "replacement": {
+      "title": "Replacement rule",
+      "tip": "When the target file already exists",
+      "skip": "Skip (keep the target file)",
+      "overwrite": "Overwrite the target file"
+    },
+    "deletion": {
+      "title": "Deletion rule",
+      "tip": "Target files that no longer exist in the source",
+      "keep": "Keep them",
+      "delete": "Delete them (mirror behaviour, dangerous)"
+    }
+  },
+  "filters": {
+    "title": "Filter rules",
+    "tip": "Include = allow-list (anything unmatched is skipped). Exclude = block-list (anything matched is skipped). Exclude always wins.",
+    "include": "Include (allow-list)",
+    "exclude": "Exclude (block-list)",
+    "add": "Add rule",
+    "empty": "No rules - every file is backed up",
+    "type": "Type",
+    "value": "Value",
+    "size_op": "Condition",
+    "size_max": "Upper bound"
+  },
+  "filter_type": {
+    "extension": "Extension",
+    "filename": "File name",
+    "regex": "Regex",
+    "size": "File size"
+  },
+  "filter_size_op": {
+    "exact": "Equal to",
+    "min": "Larger than",
+    "max": "Smaller than",
+    "between": "Between"
+  },
+  "filter_ph": {
+    "extension": "mkv,mp4",
+    "filename": "*.sample.*",
+    "regex": "^\\..*",
+    "size": "10MB"
+  }
+}

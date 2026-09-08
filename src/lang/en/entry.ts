@@ -9,6 +9,7 @@ import login from "./login.json"
 import manage from "./manage.json"
 import metas from "./metas.json"
 import plugins from "./plugins.json"
+import planned_task from "./planned_task.json"
 import settings_other from "./settings_other.json"
 import settings from "./settings.json"
 import shares from "./shares.json"
@@ -28,6 +29,7 @@ export const dict = {
   manage,
   metas,
   plugins,
+  planned_task,
   settings_other,
   settings,
   shares,
