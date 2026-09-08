@@ -4,14 +4,14 @@
 #
 # - Upload the release assets to GitHub (always git tagged `edge`).
 #
-# This workflow can be triggered on pushes to the `main` branch, or manually via the GitHub Actions UI.
+# This workflow can be triggered on pushes to the `dev` branch, or manually via the GitHub Actions UI.
 
 name: Rolling Build
 
 on:
   push:
     branches:
-      - main
+      - dev
   workflow_dispatch:
     inputs:
       draft:
