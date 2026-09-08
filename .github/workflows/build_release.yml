@@ -34,6 +34,9 @@ jobs:
   release:
     name: Release
     runs-on: ubuntu-latest
+    env:
+      # GitHub 不允许在 step 的 if 里引用 secrets 上下文，先在 job 级 env 里算好布尔值
+      HAS_BOT_GPG: ${{ secrets.BOT_GPG_PRIVATE_KEY != '' }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v7
@@ -71,7 +74,7 @@ jobs:
 
       - name: Import GPG key
         # Fork 无 BOT_GPG_* secrets 时跳过签名步骤，改用普通 commit/tag
-        if: github.event_name == 'workflow_dispatch' && secrets.BOT_GPG_PRIVATE_KEY != ''
+        if: github.event_name == 'workflow_dispatch' && env.HAS_BOT_GPG == 'true'
         uses: crazy-max/ghaction-import-gpg@v7
         with:
           gpg_private_key: ${{ secrets.BOT_GPG_PRIVATE_KEY }}
@@ -91,7 +94,7 @@ jobs:
         run: |
           jq --arg version "${{ steps.semver.outputs.version }}" '.version = $version' package.json > package.json.tmp && mv package.json.tmp package.json
           git add package.json
-          if [ -n "${{ secrets.BOT_GPG_PRIVATE_KEY }}" ]; then
+          if [ "${HAS_BOT_GPG}" = "true" ]; then
             git commit -S -m "chore: release v${{ steps.semver.outputs.version }}" --no-verify
           else
             git commit -m "chore: release v${{ steps.semver.outputs.version }}" --no-verify
@@ -99,7 +102,7 @@ jobs:
           git push
 
           # For local build, needn't push, the tag will be created by `gh release create`
-          if [ -n "${{ secrets.BOT_GPG_PRIVATE_KEY }}" ]; then
+          if [ "${HAS_BOT_GPG}" = "true" ]; then
             git tag -s "v${{ steps.semver.outputs.version }}" -m "Release v${{ steps.semver.outputs.version }}"
           else
             git tag "v${{ steps.semver.outputs.version }}" -m "Release v${{ steps.semver.outputs.version }}"
