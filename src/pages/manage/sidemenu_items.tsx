@@ -24,6 +24,7 @@ import { Component, lazy } from "solid-js"
 import { Group, UserRole } from "~/types"
 import {
   FaSolidBook,
+  FaSolidClock,
   FaSolidDatabase,
   FaSolidPuzzlePiece,
 } from "solid-icons/fa"
@@ -165,6 +166,13 @@ export const side_menu_items: SideMenuItem[] = [
         to: "/@manage/tasks/decompress",
         role: UserRole.GENERAL,
         component: lazy(() => import("./tasks/Decompress")),
+      },
+      {
+        title: "manage.sidemenu.planned_task",
+        icon: FaSolidClock,
+        to: "/@manage/tasks/planned_task",
+        backend: ["go"],
+        component: lazy(() => import("./tasks/PlannedTask")),
       },
     ],
   },

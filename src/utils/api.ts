@@ -12,6 +12,9 @@ import {
   TorrentInfo,
   TorrentUploadParseResult,
   TorrentRapidUploadResult,
+  PlannedTask,
+  PlannedTaskRecord,
+  PlannedTaskAction,
 } from "~/types"
 import { r } from "."
 
@@ -306,4 +309,69 @@ export const torrentRapidUpload = (
   path: string,
 ): PResp<TorrentRapidUploadResult> => {
   return r.post("/fs/torrent/rapid_upload", { torrent_data, path })
+}
+
+// ========== 计划任务 (planned task) 相关 API ==========
+
+export const plannedTaskList = (
+  page = 1,
+  per_page = 20,
+  keyword = "",
+): PPageResp<PlannedTask> => {
+  return r.get(`/admin/planned_task/list`, {
+    params: { page, per_page, keyword },
+  })
+}
+
+export const plannedTaskGet = (id: number): PResp<PlannedTask> => {
+  return r.get(`/admin/planned_task/get`, { params: { id } })
+}
+
+export const plannedTaskCreate = (task: PlannedTask): PResp<PlannedTask> => {
+  return r.post(`/admin/planned_task/create`, task)
+}
+
+export const plannedTaskUpdate = (task: PlannedTask): PResp<PlannedTask> => {
+  return r.post(`/admin/planned_task/update`, task)
+}
+
+export const plannedTaskDelete = (id: number): PEmptyResp => {
+  return r.post(`/admin/planned_task/delete`, null, { params: { id } })
+}
+
+export const plannedTaskSetEnabled = (
+  id: number,
+  enabled: boolean,
+): PEmptyResp => {
+  return r.post(`/admin/planned_task/${enabled ? "enable" : "disable"}`, null, {
+    params: { id },
+  })
+}
+
+export const plannedTaskRun = (
+  id: number,
+  dry_run = false,
+  confirm = false,
+): PEmptyResp => {
+  return r.post(`/admin/planned_task/run`, { dry_run, confirm }, { params: { id } })
+}
+
+export const plannedTaskRecords = (
+  id: number,
+  page = 1,
+  per_page = 20,
+): PPageResp<PlannedTaskRecord> => {
+  return r.get(`/admin/planned_task/records`, {
+    params: { id, page, per_page },
+  })
+}
+
+export const plannedTaskActions = (): PResp<PlannedTaskAction[]> => {
+  return r.get(`/admin/planned_task/actions`)
+}
+
+export const plannedTaskValidateSchedule = (
+  task: PlannedTask,
+): PResp<string[]> => {
+  return r.post(`/admin/planned_task/validate_schedule`, task)
 }
