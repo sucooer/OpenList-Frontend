@@ -160,6 +160,13 @@ build_project() {
     log_info "Running i18n build script to generate entry.ts..."
     node ./scripts/i18n.mjs
 
+    # Fork addition: re-apply fork-custom zh-CN/zh-TW keys (planned_task etc.)
+    # on top of whichever language pack we ended up with. Crowdin only knows
+    # keys that exist upstream, and the edge fallback above has no planned_task
+    # either, so without this the planned task UI renders in English.
+    log_info "Applying fork-custom i18n patches..."
+    node ./scripts/i18n-patch.mjs
+
     log_step "==== Building project ===="
     if [[ "$LITE_FLAG" == "true" ]]; then
         pnpm build:lite
