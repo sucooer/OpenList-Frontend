@@ -20,6 +20,11 @@ on:
         default: true
         type: boolean
 
+# 连续 push 时取消旧的构建：多个 rolling 构建会争抢同一个 `edge` release
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   rolling:
     name: Rolling Build
