@@ -1,0 +1,130 @@
+{
+  "name": "名稱",
+  "remark": "備註",
+  "enabled": "啟用",
+  "schedule": "排程",
+  "schedule_type": "排程類型",
+  "schedule_type_cron": "Cron 表達式",
+  "schedule_type_interval": "間隔",
+  "cron_expr": "Cron 表達式",
+  "interval_sec": "間隔（秒）",
+  "timezone": "時區",
+  "action": "動作",
+  "params": "參數（JSON）",
+  "params_tip": "動作參數，JSON 格式",
+  "params_invalid": "JSON 參數無效",
+  "next_runs": "後續執行",
+  "last_run": "上次執行",
+  "next_run": "下次執行",
+  "last_result": "上次結果",
+  "operations": "操作",
+  "run": "執行",
+  "run_dry": "試執行",
+  "history": "歷史",
+  "delete_confirm": "確定要刪除此排程任務嗎？",
+  "dangerous_confirm_title": "危險操作",
+  "dangerous_confirm_desc": "任務 [{{name}}] 包含破壞性操作（鏡像 / 刪除來源 / 差集刪除），可能會永久刪除檔案。確定要執行嗎？",
+  "result": {
+    "success": "成功",
+    "failed": "失敗",
+    "running": "執行中",
+    "skipped": "已跳過",
+    "none": "-"
+  },
+  "record": {
+    "start_time": "開始時間",
+    "duration": "耗時",
+    "result": "結果",
+    "log": "日誌",
+    "empty": "暫無執行歷史"
+  },
+  "params_help": "參數說明",
+  "params_fill": "填入範例",
+  "dangerous_tip": "此設定會永久刪除檔案。建議先用「試執行」預覽，正式執行時會再次確認。",
+  "actions": {
+    "webhook": {
+      "name": "HTTP 請求（Webhook）",
+      "desc": "向指定位址發送 HTTP 請求，可用來觸發外部服務或推送通知。",
+      "params": "url（必填）：目標位址\nmethod：GET（預設）/ POST / PUT / DELETE\nbody：請求主體原文，POST JSON 時填 JSON 字串\nheaders：自訂請求標頭，如 {\"Content-Type\": \"application/json\"}\ntimeout：逾時秒數，預設 30"
+    },
+    "backup": {
+      "name": "備份",
+      "desc": "把選取的來源目錄（含其下所有子資料夾與檔案）增量備份到目標目錄下的同名資料夾，重複執行只備份新增或變化的檔案。危險選項會永久刪除檔案，請先試執行。",
+      "params": "source（必填）：要備份的來源目錄掛載路徑，如 /我的網盤/影視\ntarget（必填）：備份根目錄，來源目錄會以同名資料夾出現在它下面，如選 /備份 則檔案存到 /備份/影視/...\nmode：copy = 只增不改（預設）| mirror = 鏡像，額外刪除目標端多餘檔案（危險）\nrules.completion.action：none / keep_source = 保留來源檔案（預設）| delete_source = 備份成功後刪除來源檔案（危險）\nrules.deletion.action：keep = 保留目標端多餘檔案（預設）| delete = 刪除目標端多餘檔案（危險）\nrules.replacement.action：skip = 目標已存在則跳過（預設）| overwrite = 覆蓋\nrules.filters.include / exclude：過濾規則陣列，見下方說明"
+    },
+    "traverse": {
+      "name": "遍歷訪問",
+      "desc": "逐個存取路徑下每個資料夾以載入其清單/中繼資料，不會下載或修改任何檔案，僅用於預熱儲存快取。",
+      "params": "path（必填）：要遍歷的根目錄掛載路徑，如 /我的網盤/影視\ndepth：向下遍歷的目錄層數；0 = 不限制（遍歷全部子目錄），1 = 僅該目錄本身，2 = 該目錄及其下一級子目錄"
+    }
+  },
+  "filters_tip": "過濾規則範例：{\"type\":\"extension\",\"value\":\"mkv,mp4\"} 只保留這些副檔名；{\"type\":\"size\",\"value\":\"10MB\",\"size_op\":\"min\"} 只保留大於 10MB 的檔案；{\"type\":\"regex\",\"value\":\"^\\\\..*\"} 符合隱藏檔，放進 exclude 即可跳過。規則放進 include 表示白名單，放進 exclude 表示黑名單（exclude 優先）。",
+  "params_visual": "參數（視覺化）",
+  "params_visual_tip": "點擊路徑輸入框會彈出目錄樹，選取後自動寫入下方 JSON；也可以直接手動修改 JSON。",
+  "field": {
+    "source": "來源目錄",
+    "target": "目標目錄",
+    "url": "請求位址 URL",
+    "mode": "方式",
+    "method": "請求方法",
+    "path": "路徑",
+    "depth": "深度（0 為不限制）"
+  },
+  "opt": {
+    "move": "移動（move）",
+    "copy": "複製（copy）",
+    "mirror": "鏡像（mirror，會刪除目標端多餘檔案）"
+  },
+  "webhook_tip": "Webhook 就是「讓 OpenList 定時去存取一個網址」。填好 URL，任務每次觸發時會向這個位址發出一次 HTTP 請求（預設 GET），常用來通知其他系統、觸發外部腳本或推送訊息。注意：是 OpenList 主動發出請求，不是接收別人的請求。",
+  "rules_title": "備份規則",
+  "rule": {
+    "completion": {
+      "title": "完成規則",
+      "tip": "備份成功後，對「來源檔案」做什麼",
+      "none": "保留來源檔案",
+      "delete_source": "刪除來源檔案（危險）"
+    },
+    "replacement": {
+      "title": "替換規則",
+      "tip": "目標端已存在同名檔案時怎麼處理",
+      "skip": "跳過（保留目標端檔案）",
+      "overwrite": "覆蓋目標端檔案"
+    },
+    "deletion": {
+      "title": "刪除規則",
+      "tip": "目標端有、來源端已經沒有的多餘檔案怎麼處理",
+      "keep": "保留",
+      "delete": "刪除（等同鏡像，危險）"
+    }
+  },
+  "filters": {
+    "title": "過濾規則（包含 / 排除）",
+    "tip": "包含 = 白名單，不符合的就不備份；排除 = 黑名單，符合的直接跳過。兩者衝突時排除優先。",
+    "include": "包含（白名單）",
+    "exclude": "排除（黑名單）",
+    "add": "新增規則",
+    "empty": "暫無規則，預設備份全部檔案",
+    "type": "類型",
+    "value": "值",
+    "size_op": "條件",
+    "size_max": "上限"
+  },
+  "filter_type": {
+    "extension": "副檔名",
+    "filename": "檔案名稱",
+    "regex": "正則表達式",
+    "size": "檔案大小"
+  },
+  "filter_size_op": {
+    "exact": "等於",
+    "min": "大於",
+    "max": "小於",
+    "between": "介於"
+  },
+  "filter_ph": {
+    "extension": "mkv,mp4",
+    "filename": "*.sample.*",
+    "regex": "^\\..*",
+    "size": "10MB"
+  }
+}

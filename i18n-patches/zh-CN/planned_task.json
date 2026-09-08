@@ -1,0 +1,130 @@
+{
+  "name": "名称",
+  "remark": "备注",
+  "enabled": "启用",
+  "schedule": "调度",
+  "schedule_type": "调度类型",
+  "schedule_type_cron": "Cron 表达式",
+  "schedule_type_interval": "间隔",
+  "cron_expr": "Cron 表达式",
+  "interval_sec": "间隔（秒）",
+  "timezone": "时区",
+  "action": "动作",
+  "params": "参数（JSON）",
+  "params_tip": "动作参数，JSON 格式",
+  "params_invalid": "JSON 参数无效",
+  "next_runs": "后续运行",
+  "last_run": "上次运行",
+  "next_run": "下次运行",
+  "last_result": "上次结果",
+  "operations": "操作",
+  "run": "执行",
+  "run_dry": "试运行",
+  "history": "历史",
+  "delete_confirm": "确定要删除此计划任务吗？",
+  "dangerous_confirm_title": "危险操作",
+  "dangerous_confirm_desc": "任务 [{{name}}] 包含破坏性操作（镜像 / 删除源 / 差集删除），可能会永久删除文件。确定要执行吗？",
+  "result": {
+    "success": "成功",
+    "failed": "失败",
+    "running": "运行中",
+    "skipped": "已跳过",
+    "none": "-"
+  },
+  "record": {
+    "start_time": "开始时间",
+    "duration": "耗时",
+    "result": "结果",
+    "log": "日志",
+    "empty": "暂无运行历史"
+  },
+  "params_help": "参数说明",
+  "params_fill": "填充示例",
+  "dangerous_tip": "该配置会永久删除文件。建议先用「试运行」预览，正式执行时会再次确认。",
+  "actions": {
+    "webhook": {
+      "name": "HTTP 请求（Webhook）",
+      "desc": "向指定地址发送 HTTP 请求，可用于触发外部服务或推送通知。",
+      "params": "url（必填）：目标地址\nmethod：GET（默认）/ POST / PUT / DELETE\nbody：请求体原文，POST JSON 时填 JSON 字符串\nheaders：自定义请求头，如 {\"Content-Type\": \"application/json\"}\ntimeout：超时秒数，默认 30"
+    },
+    "backup": {
+      "name": "备份",
+      "desc": "把选中的源目录（含其下所有子文件夹和文件）增量备份到目标目录下的同名文件夹，重复执行只备份新增或变化的文件。危险选项会永久删除文件，请先试运行。",
+      "params": "source（必填）：要备份的源目录挂载路径，如 /我的网盘/影视\ntarget（必填）：备份根目录，源目录会以同名文件夹出现在它下面，如选 /备份 则文件存到 /备份/影视/...\nmode：copy = 只增不改（默认）| mirror = 镜像，额外删除目标端多余文件（危险）\nrules.completion.action：none / keep_source = 保留源文件（默认）| delete_source = 备份成功后删除源文件（危险）\nrules.deletion.action：keep = 保留目标端多余文件（默认）| delete = 删除目标端多余文件（危险）\nrules.replacement.action：skip = 目标已存在则跳过（默认）| overwrite = 覆盖\nrules.filters.include / exclude：过滤规则数组，见下方说明"
+    },
+    "traverse": {
+      "name": "遍历访问",
+      "desc": "逐个访问路径下每个文件夹以加载其列表/元数据，不会下载或修改任何文件，仅用于预热存储缓存。",
+      "params": "path（必填）：要遍历的根目录挂载路径，如 /我的网盘/影视\ndepth：向下遍历的目录层数；0 = 不限制（遍历全部子目录），1 = 仅该目录本身，2 = 该目录及其下一级子目录"
+    }
+  },
+  "filters_tip": "过滤规则示例：{\"type\":\"extension\",\"value\":\"mkv,mp4\"} 只保留这些扩展名；{\"type\":\"size\",\"value\":\"10MB\",\"size_op\":\"min\"} 只保留大于 10MB 的文件；{\"type\":\"regex\",\"value\":\"^\\\\..*\"} 匹配隐藏文件，放进 exclude 即可跳过。规则放进 include 表示白名单，放进 exclude 表示黑名单（exclude 优先级更高）。",
+  "params_visual": "参数（可视化）",
+  "params_visual_tip": "点击路径输入框会弹出目录树，选中后自动写入下方 JSON；也可以直接手动改 JSON。",
+  "field": {
+    "source": "源目录",
+    "target": "目标目录",
+    "url": "请求地址 URL",
+    "mode": "方式",
+    "method": "请求方法",
+    "path": "路径",
+    "depth": "深度（0 为不限制）"
+  },
+  "opt": {
+    "move": "移动（move）",
+    "copy": "复制（copy）",
+    "mirror": "镜像（mirror，会删除目标端多余文件）"
+  },
+  "webhook_tip": "Webhook 就是「让 OpenList 按时去访问一个网址」。填好 URL，任务每次触发时会向这个地址发一次 HTTP 请求（默认 GET），常用来通知别的系统、触发外部脚本或推送消息。注意：是 OpenList 主动发出请求，不是接收别人的请求。",
+  "rules_title": "备份规则",
+  "rule": {
+    "completion": {
+      "title": "完成规则",
+      "tip": "备份成功后，对「源文件」做什么",
+      "none": "保留源文件",
+      "delete_source": "删除源文件（危险）"
+    },
+    "replacement": {
+      "title": "替换规则",
+      "tip": "目标端已存在同名文件时怎么处理",
+      "skip": "跳过（保留目标端文件）",
+      "overwrite": "覆盖目标端文件"
+    },
+    "deletion": {
+      "title": "删除规则",
+      "tip": "目标端有、源端已经没有的多余文件怎么处理",
+      "keep": "保留",
+      "delete": "删除（等同镜像，危险）"
+    }
+  },
+  "filters": {
+    "title": "过滤规则（包含 / 排除）",
+    "tip": "包含 = 白名单，不匹配的就不备份；排除 = 黑名单，匹配的直接跳过。两者冲突时排除优先。",
+    "include": "包含（白名单）",
+    "exclude": "排除（黑名单）",
+    "add": "添加规则",
+    "empty": "暂无规则，默认备份全部文件",
+    "type": "类型",
+    "value": "值",
+    "size_op": "条件",
+    "size_max": "上限"
+  },
+  "filter_type": {
+    "extension": "扩展名",
+    "filename": "文件名",
+    "regex": "正则表达式",
+    "size": "文件大小"
+  },
+  "filter_size_op": {
+    "exact": "等于",
+    "min": "大于",
+    "max": "小于",
+    "between": "介于"
+  },
+  "filter_ph": {
+    "extension": "mkv,mp4",
+    "filename": "*.sample.*",
+    "regex": "^\\..*",
+    "size": "10MB"
+  }
+}
