@@ -10,6 +10,7 @@ import manage from "./manage.json"
 import metas from "./metas.json"
 import plugins from "./plugins.json"
 import planned_task from "./planned_task.json"
+import settings_seed from "./settings_seed.json"
 import settings_other from "./settings_other.json"
 import settings from "./settings.json"
 import shares from "./shares.json"
@@ -30,6 +31,7 @@ export const dict = {
   metas,
   plugins,
   planned_task,
+  settings_seed,
   settings_other,
   settings,
   shares,
